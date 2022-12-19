@@ -269,6 +269,8 @@ public class InAppBrowserWebViewController: UIViewController, InAppBrowserDelega
                 navigationController?.isToolbarHidden = true
             }
             
+            navigationController?.view.backgroundColor = UIColor.white;
+            
             if let closeButtonCaption = browserOptions.closeButtonCaption, !closeButtonCaption.isEmpty {
                 closeButton = UIBarButtonItem(title: closeButtonCaption, style: .plain, target: self, action: #selector(close))
             } else {
