@@ -269,11 +269,14 @@ public class InAppBrowserWebViewController: UIViewController, InAppBrowserDelega
                 navigationController?.isToolbarHidden = true
             }
             
-            
-            if self.traitCollection.userInterfaceStyle == .dark {
-                navigationController?.view.backgroundColor = UIColor.darkGray;
+            if #available(iOS 12.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    navigationController?.view.backgroundColor = UIColor.black;
+                } else {
+                    navigationController?.view.backgroundColor = UIColor.white;
+                }
             } else {
-                navigationController?.view.backgroundColor = UIColor.white;
+                // Fallback on earlier versions
             }
             
             if let closeButtonCaption = browserOptions.closeButtonCaption, !closeButtonCaption.isEmpty {
