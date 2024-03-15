@@ -100,29 +100,31 @@ public class InAppBrowserManager: NSObject, FlutterPlugin {
     }
     
     public func presentViewController(webViewController: InAppBrowserWebViewController) {
-        let storyboard = UIStoryboard(name: WEBVIEW_STORYBOARD, bundle: Bundle(for: InAppWebViewFlutterPlugin.self))
-        let navController = storyboard.instantiateViewController(withIdentifier: NAV_STORYBOARD_CONTROLLER_ID) as! InAppBrowserNavigationController
+        let storyboard = UIStoryboard(name: InAppBrowserManager.WEBVIEW_STORYBOARD, bundle: Bundle(for: InAppWebViewFlutterPlugin.self))
+        let navController = storyboard.instantiateViewController(withIdentifier: InAppBrowserManager.NAV_STORYBOARD_CONTROLLER_ID) as! InAppBrowserNavigationController
         webViewController.edgesForExtendedLayout = []
         navController.pushViewController(webViewController, animated: false)
         webViewController.prepareNavigationControllerBeforeViewWillAppear()
         
-        let frame: CGRect = UIScreen.main.bounds
-        let tmpWindow = UIWindow(frame: frame)
-        
-        let tmpController = UIViewController()
-        let baseWindowLevel = UIApplication.shared.keyWindow?.windowLevel
-        tmpWindow.rootViewController = tmpController
-        tmpWindow.windowLevel = UIWindow.Level(baseWindowLevel!.rawValue + 1.0)
-        tmpWindow.makeKeyAndVisible()
-        navController.tmpWindow = tmpWindow
-        
         var animated = true
-        if let browserOptions = webViewController.browserOptions, browserOptions.hidden {
-            tmpWindow.isHidden = true
-            UIApplication.shared.delegate?.window??.makeKeyAndVisible()
+        if let browserSettings = webViewController.browserSettings, browserSettings.hidden {
             animated = false
         }
-        tmpWindow.rootViewController!.present(navController, animated: animated, completion: nil)
+        
+        guard let visibleViewController = UIApplication.shared.visibleViewController else {
+            assertionFailure("Failure init the visibleViewController!")
+            return
+        }
+
+        if let popover = navController.popoverPresentationController {
+            let sourceView = visibleViewController.view ?? UIView()
+
+            popover.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+            popover.sourceView = sourceView
+        }
+
+        visibleViewController.present(navController, animated: animated)
     }
     
     public func openWithSystemBrowser(url: String, result: @escaping FlutterResult) {
