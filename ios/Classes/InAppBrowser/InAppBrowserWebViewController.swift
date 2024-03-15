@@ -407,7 +407,7 @@ public class InAppBrowserWebViewController: UIViewController, InAppBrowserDelega
         if let popover = vc.popoverPresentationController {
             let sourceView = self.view
 
-            popover.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY, width: 0, height: 0)
+            popover.sourceRect = sourceView.frame
             popover.permittedArrowDirections = []
             popover.sourceView = sourceView
         }
