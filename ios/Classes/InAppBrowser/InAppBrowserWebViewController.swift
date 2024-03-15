@@ -405,11 +405,12 @@ public class InAppBrowserWebViewController: UIViewController, InAppBrowserDelega
 //            return
 //        }
         if let popover = vc.popoverPresentationController {
-            let sourceView = self.view
+//            let sourceView = self.view
 
 //            popover.sourceRect = sourceView.frame
-            popover.permittedArrowDirections = []
-            popover.sourceView = sourceView
+//            popover.permittedArrowDirections = []
+            
+            popover.sourceView = self.view
         }
         present(vc, animated: true, completion: nil)
     }
