@@ -400,12 +400,12 @@ public class InAppBrowserWebViewController: UIViewController, InAppBrowserDelega
     
     @objc public func share() {
         let vc = UIActivityViewController(activityItems: [webView.url?.absoluteString ?? ""], applicationActivities: [])
-        guard let visibleViewController = UIApplication.shared.visibleViewController else {
-            assertionFailure("Failure init the visibleViewController!")
-            return
-        }
+//        guard let visibleViewController = UIApplication.shared.visibleViewController else {
+//            assertionFailure("Failure init the visibleViewController!")
+//            return
+//        }
         if let popover = vc.popoverPresentationController {
-           let sourceView = visibleViewController.view ?? UIView()
+            let sourceView = self.view
 
             popover.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY, width: 0, height: 0)
             popover.permittedArrowDirections = []
